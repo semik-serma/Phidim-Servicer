@@ -3,14 +3,15 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import toast, { Toaster } from 'react-hot-toast';
+import { useAuth } from '@/hooks/useAuth.js';
 
 const ProfilePage = () => {
   const router = useRouter();
   
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { logout } = useAuth();
   const [error, setError] = useState(null);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [otpValue, setOtpValue] = useState('');
   const [otpError, setOtpError] = useState('');
@@ -48,6 +49,14 @@ const ProfilePage = () => {
 
     fetchUserProfile();
   }, [router]);
+
+  const handleLogout = async () => {
+  await logout();
+
+  toast.success("Logged out successfully");
+
+  router.push("/login");
+};
 
   const handleVerifyOtp = async () => {
     setOtpLoading(true);
@@ -247,6 +256,22 @@ const ProfilePage = () => {
               <Link href="/edit-profile" className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold py-2 px-5 rounded-lg transition-colors shadow-sm">
                 Edit Profile
               </Link>
+              <button
+  onClick={handleLogout}
+  className="
+    bg-red-50 
+    hover:bg-red-100
+    text-red-600
+    text-sm
+    font-semibold
+    py-2
+    px-5
+    rounded-lg
+    transition-colors
+  "
+>
+  Logout
+</button>
             </div>
           </div>
 

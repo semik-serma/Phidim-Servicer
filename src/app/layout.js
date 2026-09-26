@@ -1,5 +1,8 @@
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/context/AuthContext.jsx";
+
+
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -9,7 +12,11 @@ const dmSans = DM_Sans({
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={dmSans.className}>{children}</body>
+      <body className={dmSans.className}>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
+      </body>
     </html>
   );
 }

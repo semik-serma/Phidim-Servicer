@@ -1,66 +1,87 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import toast from 'react-hot-toast';
+import axios from 'axios';
+import Navbar from '@/components/Navbar';
 
 export default function HomePage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeFaq, setActiveFaq] = useState(null);
+  const [services,setservices] = useState(null)
+
+  useEffect(()=>{
+  const servicecall=async()=>{
+    try {
+      const response = await axios.get('http://localhost:8000/services')
+      const data = response.data
+      setservices(data)
+      console.log(response.data)
+    } catch (error) {
+      console.log(error)
+      toast.error('Error while Trying to load services')
+    }
+  }
+  servicecall()
+  },[])
+ 
+
 
   const toggleFaq = (index) => {
     setActiveFaq(activeFaq === index ? null : index);
   };
 
-  const services = [
-    {
-      title: 'Electrical & Wiring',
-      description: 'Short-circuit fixes, house rewiring, MCB trip diagnostics, and lighting setups by licensed electricians.',
-      badge: 'Popular',
-      icon: <BoltIcon className="w-6 h-6 text-amber-500" />,
-      bgGradient: 'from-amber-500/10 to-transparent',
-      price: 'Starting Rs. 299',
-    },
-    {
-      title: 'Plumbing & Sanitary',
-      description: 'Pipe leaks, motor pump repairs, bathroom fitting installs, and overhead tank cleaning solutions.',
-      badge: 'Fast Dispatch',
-      icon: <WaterIcon className="w-6 h-6 text-sky-500" />,
-      bgGradient: 'from-sky-500/10 to-transparent',
-      price: 'Starting Rs. 349',
-    },
-    {
-      title: 'CCTV & Security',
-      description: 'HD/IP surveillance camera setups, NVR configuration, remote phone view setup, and maintenance.',
-      badge: 'Commercial & Home',
-      icon: <CameraIcon className="w-6 h-6 text-emerald-500" />,
-      bgGradient: 'from-emerald-500/10 to-transparent',
-      price: 'Starting Rs. 799',
-    },
-    {
-      title: 'Internet & WiFi Support',
-      description: 'Fiber line splicing, router range extension, dual-band setup, and commercial LAN cabling.',
-      badge: '30-Min Service',
-      icon: <WifiIcon className="w-6 h-6 text-indigo-500" />,
-      bgGradient: 'from-indigo-500/10 to-transparent',
-      price: 'Starting Rs. 399',
-    },
-    {
-      title: 'Laptop & Computer Clinic',
-      description: 'Windows/Mac troubleshooting, SSD upgrades, chip-level motherboard repair, and virus cleanups.',
-      badge: 'Doorstep Pickup',
-      icon: <ComputerIcon className="w-6 h-6 text-violet-500" />,
-      bgGradient: 'from-violet-500/10 to-transparent',
-      price: 'Starting Rs. 499',
-    },
-    {
-      title: 'Inverter & Solar Power',
-      description: 'Battery health checks, solar inverter troubleshooting, backup wiring, and seasonal maintenance.',
-      badge: 'Certified',
-      icon: <SunIcon className="w-6 h-6 text-orange-500" />,
-      bgGradient: 'from-orange-500/10 to-transparent',
-      price: 'Starting Rs. 599',
-    },
-  ];
+  // const services = [
+  //   {
+  //     title: 'Electrical & Wiring',
+  //     description: 'Short-circuit fixes, house rewiring, MCB trip diagnostics, and lighting setups by licensed electricians.',
+  //     badge: 'Popular',
+  //     icon: <BoltIcon className="w-6 h-6 text-amber-500" />,
+  //     bgGradient: 'from-amber-500/10 to-transparent',
+  //     price: 'Starting Rs. 299',
+  //   },
+  //   {
+  //     title: 'Plumbing & Sanitary',
+  //     description: 'Pipe leaks, motor pump repairs, bathroom fitting installs, and overhead tank cleaning solutions.',
+  //     badge: 'Fast Dispatch',
+  //     icon: <WaterIcon className="w-6 h-6 text-sky-500" />,
+  //     bgGradient: 'from-sky-500/10 to-transparent',
+  //     price: 'Starting Rs. 349',
+  //   },
+  //   {
+  //     title: 'CCTV & Security',
+  //     description: 'HD/IP surveillance camera setups, NVR configuration, remote phone view setup, and maintenance.',
+  //     badge: 'Commercial & Home',
+  //     icon: <CameraIcon className="w-6 h-6 text-emerald-500" />,
+  //     bgGradient: 'from-emerald-500/10 to-transparent',
+  //     price: 'Starting Rs. 799',
+  //   },
+  //   {
+  //     title: 'Internet & WiFi Support',
+  //     description: 'Fiber line splicing, router range extension, dual-band setup, and commercial LAN cabling.',
+  //     badge: '30-Min Service',
+  //     icon: <WifiIcon className="w-6 h-6 text-indigo-500" />,
+  //     bgGradient: 'from-indigo-500/10 to-transparent',
+  //     price: 'Starting Rs. 399',
+  //   },
+  //   {
+  //     title: 'Laptop & Computer Clinic',
+  //     description: 'Windows/Mac troubleshooting, SSD upgrades, chip-level motherboard repair, and virus cleanups.',
+  //     badge: 'Doorstep Pickup',
+  //     icon: <ComputerIcon className="w-6 h-6 text-violet-500" />,
+  //     bgGradient: 'from-violet-500/10 to-transparent',
+  //     price: 'Starting Rs. 499',
+  //   },
+  //   {
+  //     title: 'Inverter & Solar Power',
+  //     description: 'Battery health checks, solar inverter troubleshooting, backup wiring, and seasonal maintenance.',
+  //     badge: 'Certified',
+  //     icon: <SunIcon className="w-6 h-6 text-orange-500" />,
+  //     bgGradient: 'from-orange-500/10 to-transparent',
+  //     price: 'Starting Rs. 599',
+  //   },
+  // ];
 
   const faqs = [
     {
@@ -92,111 +113,14 @@ export default function HomePage() {
         <span>Now serving all 14 wards of Phidim Municipality & surrounding Panchthar areas.</span>
         <span className="hidden sm:inline text-white/40">|</span>
         <a href="tel:+9779800000000" className="font-semibold text-emerald-300 hover:underline hidden sm:inline-flex items-center gap-1">
-          <span>Call Helpline: +977 9800000000</span>
+          <span>Call Helpline: +977 9829834643</span>
         </a>
       </div>
 
       {/* =========================================================================
           2. NAVIGATION BAR
          ========================================================================= */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 h-20 flex items-center justify-between">
-          
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-11 h-11 bg-gradient-to-tr from-[#063B00] to-[#0f6805] text-white rounded-xl flex items-center justify-center text-xl font-black shadow-md shadow-[#063B00]/20 group-hover:scale-105 transition-transform duration-200">
-              PS
-            </div>
-            <div>
-              <span className="text-xl font-extrabold text-[#063B00] tracking-tight block leading-none">
-                Phidim<span className="text-emerald-600 font-bold">Service</span>
-              </span>
-              <span className="text-[10px] uppercase font-semibold text-slate-400 tracking-wider">Panchthar, Nepal</span>
-            </div>
-          </Link>
-
-          {/* Desktop Links */}
-          <nav className="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-600">
-            <Link href="#services" className="hover:text-[#063B00] transition-colors">Services</Link>
-            <Link href="#how-it-works" className="hover:text-[#063B00] transition-colors">How It Works</Link>
-            <Link href="#why-us" className="hover:text-[#063B00] transition-colors">Why Choose Us</Link>
-            <Link href="#faq" className="hover:text-[#063B00] transition-colors">FAQ</Link>
-          </nav>
-
-          {/* Action CTAs */}
-          <div className="hidden sm:flex items-center gap-3">
-            <Link
-              href="/login"
-              className="text-sm font-semibold text-slate-700 hover:text-[#063B00] px-4 py-2.5 rounded-lg transition-colors"
-            >
-              Sign In
-            </Link>
-            <Link
-              href="/register"
-              className="bg-[#063B00] hover:bg-[#084f00] text-white text-sm font-semibold py-2.5 px-5 rounded-xl shadow-lg shadow-[#063B00]/20 hover:shadow-xl hover:shadow-[#063B00]/30 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
-            >
-              Book a Service
-            </Link>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
-            aria-label="Toggle navigation menu"
-          >
-            {isMobileMenuOpen ? <CloseIcon className="w-6 h-6" /> : <MenuIcon className="w-6 h-6" />}
-          </button>
-        </div>
-
-        {/* Mobile Dropdown Menu */}
-        {isMobileMenuOpen && (
-          <div className="lg:hidden bg-white border-b border-slate-200 px-6 py-6 space-y-4 shadow-xl">
-            <Link 
-              href="#services" 
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block text-base font-semibold text-slate-700 hover:text-[#063B00]"
-            >
-              Services
-            </Link>
-            <Link 
-              href="#how-it-works" 
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block text-base font-semibold text-slate-700 hover:text-[#063B00]"
-            >
-              How It Works
-            </Link>
-            <Link 
-              href="#why-us" 
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block text-base font-semibold text-slate-700 hover:text-[#063B00]"
-            >
-              Why Choose Us
-            </Link>
-            <Link 
-              href="#faq" 
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block text-base font-semibold text-slate-700 hover:text-[#063B00]"
-            >
-              FAQ
-            </Link>
-            <div className="pt-4 border-t border-slate-100 flex flex-col gap-3">
-              <Link
-                href="/login"
-                className="w-full text-center py-2.5 text-sm font-semibold text-slate-700 border border-slate-200 rounded-xl"
-              >
-                Sign In
-              </Link>
-              <Link
-                href="/register"
-                className="w-full text-center py-2.5 text-sm font-semibold text-white bg-[#063B00] rounded-xl shadow-md"
-              >
-                Book a Technician Now
-              </Link>
-            </div>
-          </div>
-        )}
-      </header>
+        <Navbar/>
 
       {/* =========================================================================
           3. HERO SECTION WITH DYNAMIC DISPATCH CARD
@@ -421,42 +345,70 @@ export default function HomePage() {
           </div>
 
           {/* Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {services.map((service, idx) => (
-              <div
-                key={idx}
-                className="bg-white rounded-2xl p-7 border border-slate-200/70 shadow-sm hover:shadow-xl hover:border-emerald-500/30 transition-all duration-300 flex flex-col justify-between group"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-5">
-                    <div className="w-13 h-13 p-3 rounded-xl bg-slate-50 border border-slate-100 group-hover:scale-110 transition-transform">
-                      {service.icon}
-                    </div>
-                    <span className="text-[11px] font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-                      {service.badge}
-                    </span>
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-2.5 group-hover:text-[#063B00] transition-colors">
-                    {service.title}
-                  </h3>
-                  <p className="text-slate-600 text-sm leading-relaxed mb-6">
-                    {service.description}
-                  </p>
-                </div>
+ <div className="w-full max-w-7xl mx-auto py-8">
+  {/* Section Header / Title */}
+  {name && (
+    <div className="mb-8 sm:mb-10 text-center max-w-2xl mx-auto">
+      <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+        {name}
+      </h2>
+    </div>
+  )}
 
-                <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-500">{service.price}</span>
-                  <Link
-                    href="/register"
-                    className="text-xs font-bold text-[#063B00] hover:underline flex items-center gap-1"
-                  >
-                    <span>Book Now</span>
-                    <ArrowRightIcon className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
-              </div>
-            ))}
+  {/* Services Grid */}
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+    {services &&
+      services.map((service, idx) => (
+        <div
+          key={idx}
+          className="group bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-emerald-500/30 transition-all duration-300 flex flex-col overflow-hidden"
+        >
+          {/* Service Image Banner */}
+          <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
+            <img
+              src={service.image}
+              alt={service.name}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+            />
+
+            {/* Floating Badge */}
+            {service.badge && (
+              <span className="absolute top-3.5 right-3.5 text-[11px] font-semibold text-emerald-900 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm border border-slate-100">
+                {service.badge}
+              </span>
+            )}
           </div>
+
+          {/* Card Body */}
+          <div className="p-6 flex flex-col flex-1 justify-between">
+            <div>
+              {/* Service Title */}
+              <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-[#063B00] transition-colors">
+                {service.name}
+              </h3>
+              <p className="text-slate-600 text-sm leading-relaxed mb-6 line-clamp-2">
+                {service.description}
+              </p>
+            </div>
+
+            {/* Footer */}
+            <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+              <span className="text-sm font-semibold text-slate-900">
+                {service.price}
+              </span>
+              <Link
+                href="/register"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#063B00] bg-emerald-50/80 hover:bg-[#063B00] hover:text-white px-3 py-1.5 rounded-lg transition-colors duration-200"
+              >
+                <span>Book Now</span>
+                <ArrowRightIcon className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      ))}
+  </div>
+</div>
         </div>
       </section>
 
